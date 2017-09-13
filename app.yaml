@@ -28,6 +28,7 @@ handlers:
 - url: /.*
   script: amaa.wsgi.application
   secure: always
+  login: required
 
 skip_files:
   - ^manage\.py$
