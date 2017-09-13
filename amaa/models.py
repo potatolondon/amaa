@@ -27,6 +27,7 @@ class QuestionSession(models.Model):
     time = models.DateTimeField()
     owners = djangae_fields.RelatedSetField(settings.AUTH_USER_MODEL)
     is_on_air = models.BooleanField(default=False)
+    is_finished = models.BooleanField(default=False)
 
     def wipeout(self):
         """ Wipe out all the data from the question session, leaving only the questions
@@ -42,7 +43,8 @@ class QuestionSession(models.Model):
     def votes_can_be_wiped(self):
         """ Is it ok to delete the vote data from this session? """
         return (
-            not self.is_on_air and
+            self.is_finished and
+            (not self.is_on_air) and
             self.time < timezone.now() - timedelta(minutes=30)
         )
 
