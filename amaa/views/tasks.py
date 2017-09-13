@@ -89,3 +89,23 @@ def create_users(request):
         first_name, last_name = name.split(None, 1)  # Yeah yeah, crude
         User.objects.pre_create_google_user(email, first_name=first_name, last_name=last_name)
         logger.info("Created new user %s", email)
+
+
+def delete_votes_from_session(session_pk):
+    """ Wipe out Vote data from old QuestionSessions so that we (further) protect anonymity.
+        This avoids things like seeing who voted for something when only one person used their
+        vote (because the unused Vote objets would tell you who the one used vote belonged to).
+        We should leave only the questions and the vote counts.
+    """
+    from amaa.models import QuestionSession
+    session = QuestionSession.objects.get(pk=session_pk)
+    if not session.votes_can_be_wiped():
+        logger.info(
+            "Not wiping votes from session %s because either it's not (far enough) in the past "
+            "or it's still on air.",
+            session_pk
+        )
+        return
+    for question in session.question_set.all():
+        question.vote_set.all().delete()
+    logger.info("Finishing deleting Vote objects from session %s", session_pk)

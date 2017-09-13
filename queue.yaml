@@ -10,8 +10,12 @@ queue:
   bucket_size: 100
   max_concurrent_requests: 500
 
-
 - name: vote-creation
   rate: 10/s
   bucket_size: 100
   max_concurrent_requests: 10
+
+- name: wipeout
+  rate: 1/s
+  bucket_size: 100
+  max_concurrent_requests: 1

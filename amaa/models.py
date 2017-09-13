@@ -1,8 +1,12 @@
+# STANDARD LIB
+from datetime import timedelta
+
 # THIRD PARTY
 from djangae import fields as djangae_fields
 from djangae.contrib.gauth_datastore.models import GaeAbstractDatastoreUser
 from django.conf import settings
 from django.db import models, IntegrityError
+from django.utils import timezone
 from google.appengine.ext import deferred
 
 # AMAA
@@ -28,9 +32,19 @@ class QuestionSession(models.Model):
         """ Wipe out all the data from the question session, leaving only the questions
             and the number of votes for each.  This is to aid anonymity.
         """
+        assert self.votes_can_be_wiped()
+        deferred.defer(
+            tasks.delete_votes_from_session, self.pk,
+            _queue=settings.QUEUES.WIPEOUT
+        )
+        tasks.delete_votes_from_session(self.pk)
 
-        # TODO: check that this can only be called AFTER the Q & A session has happened.
-        raise NotImplementedError
+    def votes_can_be_wiped(self):
+        """ Is it ok to delete the vote data from this session? """
+        return (
+            not self.is_on_air and
+            self.time < timezone.now() - timedelta(minutes=30)
+        )
 
     def __str__(self):
         return self.name
