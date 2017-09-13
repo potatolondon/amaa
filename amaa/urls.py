@@ -3,7 +3,7 @@ from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.contrib.staticfiles.views import serve
 
-from .views import tasks, public
+from .views import tasks as task_views
 
 import session_csrf
 session_csrf.monkeypatch()
@@ -24,9 +24,9 @@ urlpatterns = (
 
     url(r'^auth/', include('djangae.contrib.gauth.urls')),
 
-    url(r'^_cron/sum-votes/', tasks.sum_votes),
+    url(r'^_cron/sum-votes/', task_views.sum_votes),
 
-    url(r'^$', public.home, name='home'),
+    url(r'^', include('dashboard.urls')),
 )
 
 if settings.DEBUG:
