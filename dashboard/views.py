@@ -47,6 +47,13 @@ def submit_question(request):
     raise NotImplementedError
 
 
+def finish(request, session_pk):
+    # This will allow you to set the 'is_finished' flag to True and wipe out the voting data.
+    # That will have the effect of hiding the session from the home page
+    raise NotImplementedError
+
+
 def wipeout_voting_data(request):
-    # This will allow you to call QuestionSession.wipeout() after a session is finished
+    # This will allow you to call QuestionSession.wipeout() after a session is finished.
+    # This might not be needed if we trigger it from the 'finish' view
     raise NotImplementedError
