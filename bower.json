@@ -1,0 +1,21 @@
+{
+  "name": "amaa",
+  "homepage": "https://github.com/potatolondon/amaa",
+  "authors": [
+    "Javi Manzano <javiman@google.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "static/vendor/",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "v4.0.0-alpha.6"
+  }
+}

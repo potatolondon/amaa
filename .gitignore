@@ -7,6 +7,7 @@ __pycache__/
 /.*
 !/.gitignore
 !/.gitmodules
+!/.bowerrc
 
 # C extensions
 *.so
@@ -49,3 +50,6 @@ coverage.xml
 
 # Sphinx documentation
 docs/_build/
+
+# Bower
+/static/vendor
