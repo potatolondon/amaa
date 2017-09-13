@@ -1,6 +1,21 @@
 # THIRD PARTY
 from djangae import fields as djangae_fields
+from djangae.contrib.gauth_datastore import GaeAbstractDatastoreUser
+from django.conf import settings
+from django.core.exceptions import IntegrityError
 from django.db import models
+from google.appengine.ext import deferred
+
+# AMAA
+from .constants import USER_CHOICES
+from . import views
+
+
+class User(GaeAbstractDatastoreUser):
+    """ Our own custom user model.  Nothing really custom about it yet, but creating our own model
+        so that we don't have to change the DB table if we want to add custom fields later.
+    """
+    pass
 
 
 class QuestionSession(models.Model):
@@ -8,6 +23,8 @@ class QuestionSession(models.Model):
 
     name = djangae_fields.CharField()
     time = models.DateTimeField()
+    owners = models.SetField(djangae_fields.CharField(), choices=USER_CHOICES)
+    is_on_air = models.BooleanField(default=False)
 
     def wipeout(self):
         """ Wipe out all the data from the question session, leaving only the questions
@@ -23,7 +40,23 @@ class Question(models.Model):
 
     session = models.ForeignKey(QuestionSession)
     text = djangae_fields.CharField(max_length=140)  # Twitter-style length limit!
-    votes = djangae_fields.ShardedCounterField(shard_count=10)
+    votes_sharded = djangae_fields.ShardedCounterField(shard_count=10)
+    votes_summed = models.PositiveIntegerField(default=0)
+    is_asked = models.BooleanField(default=False)
+
+    def save(self, *args, **kwargs):
+        """ Save the model, and if we are CREATING this Question, then defer a task to create the
+            vote objects for all the users.
+        """
+        is_adding = self._state.adding  # Store a reference which we check after save
+        return_value = super(Question, self).save(*args, **kwargs)
+        if is_adding:
+            deferred.defer(
+                views.tasks.create_votes_for_users,
+                self.pk,
+                _queue=settings.QUEUES.VOTE_CREATION,
+            )
+        return return_value
 
 
 class Vote(models.Model):
@@ -35,12 +68,9 @@ class Vote(models.Model):
     answer = models.IntegerField(null=True)
     user = models.ForeignKey(User, null=True)
 
-
-
     def save(self, *args, **kwargs):
         self._run_integrity_checks()
         super(Vote, self).save()
-
 
     def _run_integrity_checks(self):
         """ Run integrity checks which can't be defined in the DB fields (e.g. unique constraints)
@@ -48,4 +78,3 @@ class Vote(models.Model):
         """
         if self.answer is not None and self.user:
             raise IntegrityError("Cannot have an answer and a user. This would break anonymity.")
-

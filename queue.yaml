@@ -1,0 +1,17 @@
+queue:
+
+- name: default
+  rate: 50/s
+  bucket_size: 100
+  max_concurrent_requests: 100
+
+- name: vote-summing
+  rate: 100/s
+  bucket_size: 100
+  max_concurrent_requests: 500
+
+
+- name: vote-creation
+  rate: 10/s
+  bucket_size: 100
+  max_concurrent_requests: 10

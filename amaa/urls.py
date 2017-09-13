@@ -3,6 +3,8 @@ from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.contrib.staticfiles.views import serve
 
+from . import views
+
 import session_csrf
 session_csrf.monkeypatch()
 
@@ -21,6 +23,8 @@ urlpatterns = (
     url(r'^csp/', include('cspreports.urls')),
 
     url(r'^auth/', include('djangae.contrib.gauth.urls')),
+
+    url(r'^_cron/sum-votes/', views.tasks.sum_votes),
 )
 
 if settings.DEBUG:
