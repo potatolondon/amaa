@@ -133,8 +133,8 @@ CSP_IMG_SRC = ("'self'", "data:", "s.ytimg.com", "*.googleusercontent.com", "*.g
 CSP_CONNECT_SRC = ("'self'", "plus.google.com", "www.google-analytics.com")
 
 
-# TODO: make this work
-# AUTH_USER_MODEL = "aama.User"
+AUTH_USER_MODEL = "amaa.User"
+
 
 class QUEUES:
     VOTE_SUMMING = "vote-summing"
