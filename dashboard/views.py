@@ -45,3 +45,7 @@ def all_questions(request):
 def submit_question(request):
     raise NotImplementedError
 
+
+def wipeout_voting_data(request):
+    # This will allow you to call QuestionSession.wipeout() after a session is finished
+    raise NotImplementedError
