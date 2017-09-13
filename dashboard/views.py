@@ -40,3 +40,8 @@ def big_screen(request):
 
 def all_questions(request):
     return render(request, template_name='dashboard/all_questions.html', context={})
+
+
+def submit_question(request):
+    raise NotImplementedError
+
