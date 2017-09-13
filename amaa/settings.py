@@ -139,3 +139,5 @@ AUTH_USER_MODEL = "amaa.User"
 class QUEUES:
     VOTE_SUMMING = "vote-summing"
     VOTE_CREATION = "vote-creation"
+
+GOOGLE_APPS_EMAIL_DOMAIN = "potatolondon.com"

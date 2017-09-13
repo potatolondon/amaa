@@ -7,6 +7,9 @@ from django.conf import settings
 from django.http import HttpResponse
 from google.appengine.ext import deferred
 
+# AMAA
+from amaa.constants import USER_CHOICES
+
 
 logger = logging.getLogger(__name__)
 
@@ -66,7 +69,23 @@ def create_votes_for_users(question_pk):
     logger.info("Created votes for question %s", question_pk)
 
 
+def create_users(request):
+    """ Make sure that there is a User object for each user in USER_CHOICES.
+    """
+    from amaa.models import User
+    users_by_username = {username: name for name, username in USER_CHOICES.items()}
+    # Go through the existing users and remove them all from our dictionary.
+    # That will then leave us with the users that we need to create
+    for user in User.objects.all():
+        username = user.email.split("@")[0]
+        try:
+            del users_by_username[username]
+        except KeyError:
+            logger.warning("User %s exists but is not in USER_CHOICES", username)
 
-def _pre_create_users():
-    """ Make sure that there is a User object for each user in USER_CHOICES. """
-    raise NotImplementedError
+    # Now create any users which don't exist
+    for username, name in users_by_username.items():
+        email = "%s@%s" % (username, settings.GOOGLE_APPS_EMAIL_DOMAIN)
+        first_name, last_name = name.split(None, 1)  # Yeah yeah, crude
+        User.objects.pre_create_google_user(email, first_name=first_name, last_name=last_name)
+        logger.info("Created new user %s", email)
