@@ -6,7 +6,6 @@ from django.db import models, IntegrityError
 from google.appengine.ext import deferred
 
 # AMAA
-from .constants import USER_CHOICES
 from .views import tasks
 
 
@@ -22,7 +21,7 @@ class QuestionSession(models.Model):
 
     name = djangae_fields.CharField()
     time = models.DateTimeField()
-    owners = djangae_fields.SetField(djangae_fields.CharField(), choices=USER_CHOICES)
+    owners = djangae_fields.RelatedSetField(settings.AUTH_USER_MODEL)
     is_on_air = models.BooleanField(default=False)
 
     def wipeout(self):
