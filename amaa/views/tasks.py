@@ -7,9 +7,6 @@ from django.conf import settings
 from django.http import HttpResponse
 from google.appengine.ext import deferred
 
-# AMAA
-from amaa.models import QuestionSession, Question
-
 
 logger = logging.getLogger(__name__)
 
@@ -25,6 +22,7 @@ def sum_votes(request):
     # fire off another task for each question so that we get an update every few seconds.
     # But (to avoid running crons all the time), we only fire off those tasks for questions that
     # have not yet been asked, in sessions that are active.
+    from amaa.models import QuestionSession
     for session in QuestionSession.objects.filter(is_on_air=True):
         for question_pk in session.question_set.filter(is_asked=False).values_list('pk', flat=True):
             for countdown in xrange(0, 60, 10):
@@ -42,6 +40,7 @@ def _sum_votes_for_question(question_pk):
     """ Given a single Question ID, check to see if the number of votes in the sharded counter
         field has changed, and if it has then update the non-sharded votes field.
     """
+    from amaa.models import Question
     question = Question.objects.get(pk=question_pk)
     if question.is_asked:
         return
