@@ -56,10 +56,15 @@ def _sum_votes_for_question(question_pk):
 
 def create_votes_for_users(question_pk):
     """ Create all of the Vote objects (one for each user) for the given Question. """
+    from amaa.models import Question, User, Vote
+    question = Question.objects.get(pk=question_pk)
+    assert not Vote.objects.filter(question=question).exists()
+    votes = []
+    for user in User.objects.all():
+        votes.append(Vote(question=question, user=user))
+    Vote.objects.bulk_create(votes)
+    logger.info("Created votes for question %s", question_pk)
 
-    # If not all the User objects exist, create them.
-    # Then create all the Vote objects.
-    raise NotImplementedError
 
 
 def _pre_create_users():
