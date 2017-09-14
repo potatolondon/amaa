@@ -28,7 +28,7 @@ def sum_votes(request):
     # have not yet been asked, in sessions that are active.
     from amaa.models import QuestionSession
     for session in QuestionSession.objects.filter(is_on_air=True):
-        for question_pk in session.question_set.filter(is_asked=False).values_list('pk', flat=True):
+        for question_pk in session.question_list.filter(is_asked=False).values_list('pk', flat=True):
             for countdown in xrange(0, 60, 10):
                 deferred.defer(
                     _sum_votes_for_question, question_pk,
