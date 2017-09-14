@@ -1,37 +1,59 @@
 {% extends 'dashboard/base.html' %}
 
 {% block content %}
-    <h1>{{ question_session.name }}</h1>
+    <h1>
+        <small>AMA Anonymous</small><br/>
+        {{ question_session.name }}
+    </h1>
 
-    <form action="" method="post">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="id_question">Ask a question</label>
-            <textarea class="form-control" name="question" id="id_question" cols="30" rows="10"></textarea>
-        </div>
-        {% if form.question.errors %}
-            {% for error in form.question.errors %}
-                <div class="alert alert-danger" role="alert">{{ error }}</div>
-            {% endfor %}
-        {% endif %}
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
+    <p class="top">
+        Check out the latest questions, or ask one yourself.
+    </p>
 
-    <ul>
+    <ul class='qlist'>
+
+        <li class="newq {% if form.question.errors %}open{% endif %}">
+            <form action="" method="post">
+                {% csrf_token %}
+                <label for="id_question">Ask a new question</label>
+                <button type="button" class='open-close'></button>
+                <div class="newq-form">
+                    <textarea class="form-control" name="question" id="id_question" rows="3"></textarea>
+                    {% if form.question.errors %}
+                        {% for error in form.question.errors %}
+                        <div class="alert alert-danger" role="alert">{{ error }}</div>
+                        {% endfor %}
+                    {% endif %}
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </li>
+
         {% for question in question_list %}
-            <li>
-                {{ question.text }}
+            <li class='q'>
+                <div class="question">{{ question.text }}</div>
                 <form action="{% url 'dashboard:vote_question' question.id %}" method="post">
                     {% csrf_token %}
-                    <input
-                        class="btn btn-primary btn-sm"
-                        type="submit"
-                        value="Vote"
+                    <button
+                        class="vote {% if not question.can_vote %}selected{% endif %}"
                         {% if not question.can_vote %}disabled="disabled"{% endif %}
                     >
+                        <svg width="16px" height="14px" viewBox="0 0 16 14" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                        <defs></defs>
+                            <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                            <g id="like-off" transform="translate(-10.000000, -5.000000)" fill-rule="nonzero">
+                            <g id="Group">
+                            <g class="thumbsup" transform="translate(10.000000, 5.000000)">
+                            <path class="thumb-shape" d="M0.666666667,14 L3.33333333,14 L3.33333333,6 L0.666666667,6 L0.666666667,14 Z M15.3333333,6.66666667 C15.3333333,5.93333333 14.7333333,5.33333333 14,5.33333333 L9.79333333,5.33333333 L10.4266667,2.28666667 L10.4466667,2.07333333 C10.4466667,1.8 10.3333333,1.54666667 10.1533333,1.36666667 L9.44666667,0.666666667 L5.06,5.06 C4.81333333,5.3 4.66666667,5.63333333 4.66666667,6 L4.66666667,12.6666667 C4.66666667,13.4 5.26666667,14 6,14 L12,14 C12.5533333,14 13.0266667,13.6666667 13.2266667,13.1866667 L15.24,8.48666667 C15.3,8.33333333 15.3333333,8.17333333 15.3333333,8 L15.3333333,6.72666667 L15.3266667,6.72 L15.3333333,6.66666667 Z" id="Shape"></path>
+                            </g>
+                            </g>
+                            </g>
+                            </g>
+                        </svg>
+                    </button>
                 </form>
             </li>
-        {% empty %}
+            {% empty %}
             <li>There are no questions yet.</li>
         {% endfor %}
     </ul>
