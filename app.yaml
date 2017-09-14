@@ -1,4 +1,4 @@
-application: amaa
+application: ama-anonymous
 version: 1
 runtime: python27
 api_version: 1
@@ -28,6 +28,7 @@ handlers:
 - url: /.*
   script: amaa.wsgi.application
   secure: always
+  login: required
 
 skip_files:
   - ^manage\.py$

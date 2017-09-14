@@ -1,5 +1,3 @@
-from google.appengine.api import users
-
 from amaa.models import QuestionSession, Question
 from dashboard.forms import QuestionForm
 from django.shortcuts import render, redirect
