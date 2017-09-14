@@ -1,5 +1,9 @@
 # THIRD PARTY
-from django.shortcuts import render, redirect
+from django.shortcuts import (
+    get_object_or_404,
+    redirect,
+    render,
+)
 from django.core.urlresolvers import reverse
 
 # AMAA
@@ -14,7 +18,7 @@ def session_list(request):
 
 
 def question_list(request, pk):
-    question_session = QuestionSession.objects.get(id=pk)
+    question_session = get_object_or_404(QuestionSession, id=pk)
 
     if request.POST:
         form = QuestionForm(request.POST)
