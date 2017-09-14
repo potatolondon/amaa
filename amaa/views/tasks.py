@@ -38,24 +38,24 @@ def sum_votes(request):
     return HttpResponse("Vote summing tasks deferred.")
 
 
-# Note that this transaction relies on there only being 10 shards in the `votes_sharded` field
-@transaction.atomic()
 def _sum_votes_for_question(question_pk):
     """ Given a single Question ID, check to see if the number of votes in the sharded counter
         field has changed, and if it has then update the non-sharded votes field.
     """
     from amaa.models import Question
-    question = Question.objects.get(pk=question_pk)
-    if question.is_asked:
-        return
-    sharded_votes = question.votes_sharded.count()
-    if question.votes_summed != sharded_votes:
-        if question.votes_summed > sharded_votes:
-            logger.error("Question %s has more votes_sharded than votes_sharded.", question_pk)
+    # Note that this transaction relies on there only being 10 shards in the `votes_sharded` field
+    with transaction.atomic():
+        question = Question.objects.get(pk=question_pk)
+        if question.is_asked:
             return
+        sharded_votes = question.votes_sharded.count()
+        if question.votes_summed != sharded_votes:
+            if question.votes_summed > sharded_votes:
+                logger.error("Question %s has more votes_sharded than votes_sharded.", question_pk)
+                return
 
-        question.votes_summed = sharded_votes
-        question.save()
+            question.votes_summed = sharded_votes
+            question.save()
 
 
 def create_votes_for_users(question_pk):
