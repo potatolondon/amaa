@@ -26,7 +26,7 @@ urlpatterns = (
 
     url(r'^_cron/sum-votes/', task_views.sum_votes),
 
-    url(r'^', include('dashboard.urls')),
+    url(r'^', include('dashboard.urls', namespace='dashboard')),
 )
 
 if settings.DEBUG:
