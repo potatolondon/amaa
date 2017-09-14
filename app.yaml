@@ -25,6 +25,11 @@ handlers:
   secure: always
   login: admin
 
+- url: /_(tasks|cron).*
+  script: amaa.wsgi.application
+  secure: always
+  login: admin
+
 - url: /.*
   script: amaa.wsgi.application
   secure: always
