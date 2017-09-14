@@ -36,6 +36,7 @@ skip_files:
   - ^requirements/.*\.txt$
   - ^sitepackages/dev.*
   - ^.*\.(egg|dist)-info/.*$
+  - ^static/vendor/.*
 
   # Defaults.
   - ^(.*/)?#.*#$
