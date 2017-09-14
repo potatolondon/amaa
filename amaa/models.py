@@ -1,14 +1,13 @@
 # THIRD PARTY
 from djangae import fields as djangae_fields
-from djangae.contrib.gauth_datastore import GaeAbstractDatastoreUser
+from djangae.contrib.gauth_datastore.models import GaeAbstractDatastoreUser
 from django.conf import settings
-from django.core.exceptions import IntegrityError
-from django.db import models
+from django.db import models, IntegrityError
 from google.appengine.ext import deferred
 
 # AMAA
 from .constants import USER_CHOICES
-from . import views
+from .views import tasks
 
 
 class User(GaeAbstractDatastoreUser):
@@ -23,7 +22,7 @@ class QuestionSession(models.Model):
 
     name = djangae_fields.CharField()
     time = models.DateTimeField()
-    owners = models.SetField(djangae_fields.CharField(), choices=USER_CHOICES)
+    owners = djangae_fields.SetField(djangae_fields.CharField(), choices=USER_CHOICES)
     is_on_air = models.BooleanField(default=False)
 
     def wipeout(self):
@@ -52,7 +51,7 @@ class Question(models.Model):
         return_value = super(Question, self).save(*args, **kwargs)
         if is_adding:
             deferred.defer(
-                views.tasks.create_votes_for_users,
+                tasks.create_votes_for_users,
                 self.pk,
                 _queue=settings.QUEUES.VOTE_CREATION,
             )
