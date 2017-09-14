@@ -59,5 +59,5 @@ def finish(request, session_pk):
 
 def wipeout_voting_data(request):
     # This will allow you to call QuestionSession.wipeout() after a session is finished.
-    # This might not be needed if we trigger it from the 'finish' view
+    # This might not be needed if we trigger it from the finish view.
     raise NotImplementedError
