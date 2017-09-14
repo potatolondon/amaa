@@ -20,6 +20,11 @@ indexes:
   - name: __key__
     direction: desc
 
+- kind: amaa_vote
+  properties:
+  - name: __key__
+    direction: desc
+
 - kind: cspreports_cspreport
   properties:
   - name: created
