@@ -75,6 +75,9 @@ class Question(models.Model):
             )
         return return_value
 
+    def __str__(self):
+        return self.text
+
 
 class Vote(models.Model):
     """ A vote from an audience member to ANONYMOUSLY register their preference about whether or
