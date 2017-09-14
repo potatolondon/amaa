@@ -1,4 +1,4 @@
-{% load static %}
+{% load staticfiles %}
 <!doctype html>
 <html lang="en">
 <head>
@@ -8,8 +8,38 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>AMAA</title>
     <link rel="stylesheet" href="{% static 'vendor/bootstrap/dist/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/amaa.css' %}">
 </head>
 <body>
-    {% block content %}{% endblock content %}
+
+    <nav class="navbar navbar-toggleable-md navbar-inverse bg-inverse">
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <a class="navbar-brand" href="#">AMAA</a>
+
+        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'dashboard:home' %}">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'dashboard:big_screen' %}">Big screen</a>
+            </li>
+            {# TODO: Admin only #}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'dashboard:all_questions' %}">Admin</a>
+            </li>
+        </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        {% block content %}{% endblock content %}
+    </div>
+
+    <script src="{% static 'vendor/jquery/dist/jquery.min.js' %}"></script>
+    <script src="{% static 'vendor/tether/dist/js/tether.min.js' %}"></script>
+    <script src="{% static 'vendor/bootstrap/dist/js/bootstrap.min.js' %}"></script>
 </body>
 </html>
