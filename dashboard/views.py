@@ -48,8 +48,14 @@ def question_list(request, pk):
     })
 
 
-def big_screen(request):
-    return render(request, template_name='dashboard/big_screen.html', context={})
+def big_screen(request, pk):
+    question_session = get_object_or_404(QuestionSession, id=pk)
+    question_list = question_session.question_set.order_by("-votes_summed")
+    context = {
+        "question_session": question_session,
+        "question_list": question_list,
+    }
+    return render(request, 'dashboard/big_screen.html', context)
 
 
 def all_questions(request):
