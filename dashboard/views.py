@@ -27,7 +27,6 @@ def question_list(request, pk):
             Question.objects.create(
                 session=question_session,
                 text=form.cleaned_data['question'],
-                is_on_air=True,
             )
             return redirect(reverse('dashboard:question_list', kwargs={'pk': question_session.pk}))
     else:
