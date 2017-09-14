@@ -1,5 +1,9 @@
+from google.appengine.api import users
+
 from amaa.models import QuestionSession, Question
-from django.shortcuts import render
+from dashboard.forms import QuestionForm
+from django.shortcuts import render, redirect
+from django.urls import reverse
 
 
 def session_list(request):
@@ -10,9 +14,23 @@ def session_list(request):
 
 def question_list(request, pk):
     question_session = QuestionSession.objects.get(id=pk)
+
+    if request.POST:
+        form = QuestionForm(request.POST)
+
+        if form.is_valid():
+            Question.objects.create(
+                session=question_session,
+                text=form.cleaned_data['question'],
+            )
+            return redirect(reverse('dashboard:question_list', kwargs={'pk': question_session.pk}))
+    else:
+        form = QuestionForm()
+
     return render(request, template_name='dashboard/question_list.html', context={
         'question_session': question_session,
-        'question_list': question_session.question_list.all()
+        'question_list': question_session.question_list.all(),
+        'form': form,
     })
 
 
