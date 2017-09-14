@@ -4,6 +4,7 @@ import logging
 # THIRD PARTY
 from djangae.db import transaction
 from django.conf import settings
+from django.db import IntegrityError
 from django.http import HttpResponse
 from google.appengine.ext import deferred
 
@@ -64,8 +65,7 @@ def create_votes_for_users(question_pk):
     assert not Vote.objects.filter(question=question).exists()
     votes = []
     for user in User.objects.all():
-        votes.append(Vote(question=question, user=user))
-    Vote.objects.bulk_create(votes)
+        Vote.objects.create(question=question, user=user)
     logger.info("Created votes for question %s", question_pk)
 
 
@@ -73,7 +73,7 @@ def create_users(request):
     """ Make sure that there is a User object for each user in USER_CHOICES.
     """
     from amaa.models import User
-    users_by_username = {username: name for name, username in USER_CHOICES.items()}
+    users_by_username = {username: name for name, username in USER_CHOICES}
     # Go through the existing users and remove them all from our dictionary.
     # That will then leave us with the users that we need to create
     for user in User.objects.all():
@@ -87,8 +87,13 @@ def create_users(request):
     for username, name in users_by_username.items():
         email = "%s@%s" % (username, settings.GOOGLE_APPS_EMAIL_DOMAIN)
         first_name, last_name = name.split(None, 1)  # Yeah yeah, crude
-        User.objects.pre_create_google_user(email, first_name=first_name, last_name=last_name)
-        logger.info("Created new user %s", email)
+        try:
+            User.objects.pre_create_google_user(email, first_name=first_name, last_name=last_name)
+            logger.info("Created new user %s", email)
+        except IntegrityError as e:
+            pass
+
+    return HttpResponse("Users created")
 
 
 def delete_votes_from_session(session_pk):
