@@ -105,7 +105,5 @@ class Vote(models.Model):
 
     def vote(self, answer=True):
         """ Cast the vote as the given answer. """
-        self.answer = answer
-        self.user = None
-        self.save()
         self.question.votes_sharded.increment()
+        self.delete()

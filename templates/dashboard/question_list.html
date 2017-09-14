@@ -21,7 +21,7 @@
         {% for question in question_list %}
             <li>
                 {{ question.text }}
-                <form action="{% url 'dashboard:vote_question' question.id %}">
+                <form action="{% url 'dashboard:vote_question' question.id %}" method="post">
                     {% csrf_token %}
                     <input
                         class="btn btn-primary btn-sm"
