@@ -1,9 +1,10 @@
 from google.appengine.api import users
 
+from amaa.settings import GOOGLE_APPS_EMAIL_DOMAIN
 from django.http import HttpResponseForbidden
 
 
-class PotatoLodingMiddleware(object):
+class PotatoAuthMiddleware(object):
     def process_request(self, request):
-        if not users.get_current_user().email().endswith('@potatolondon.com'):
+        if not users.get_current_user().email().endswith('@{}'.format(GOOGLE_APPS_EMAIL_DOMAIN)):
             return HttpResponseForbidden()

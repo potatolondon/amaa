@@ -57,6 +57,7 @@ MIDDLEWARE_CLASSES = (
     'session_csrf.CsrfMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'dashboard.middleware.PotatoAuthMiddleware',
 )
 
 TEMPLATES = [
