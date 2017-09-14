@@ -15,7 +15,9 @@ STATIC_URL = '/static/'
 SECURE_REDIRECT_EXEMPT = [
     # App Engine doesn't use HTTPS internally, so the /_ah/.* URLs need to be exempt.
     # Django compares these to request.path.lstrip("/"), hence the lack of preceding /
-    r"^_ah/"
+    r"^_ah/",
+    r"^_cron/",
+    r"^_tasks/",
 ]
 
 DEBUG = False
