@@ -104,3 +104,4 @@ class Vote(models.Model):
         self.answer = answer
         self.user = None
         self.save()
+        self.question.votes_sharded.increment()
