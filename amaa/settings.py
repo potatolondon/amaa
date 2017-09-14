@@ -40,7 +40,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'csp',
     'cspreports',
-    'djangae.contrib.gauth.datastore',
+    'djangae.contrib.gauth_datastore',
     'djangae.contrib.security',
     'amaa',
     'dashboard',
@@ -118,7 +118,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 # Using a route that is not caught by appengines routing in app.yaml
-STATIC_URL = '/static-dev/'
+STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 # sensible default CSP settings, feel free to modify them
@@ -133,7 +133,8 @@ CSP_IMG_SRC = ("'self'", "data:", "s.ytimg.com", "*.googleusercontent.com", "*.g
 CSP_CONNECT_SRC = ("'self'", "plus.google.com", "www.google-analytics.com")
 
 
-AUTH_USER_MODEL = "aama.User"
+# TODO: make this work
+# AUTH_USER_MODEL = "aama.User"
 
 class QUEUES:
     VOTE_SUMMING = "vote-summing"
