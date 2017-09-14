@@ -109,6 +109,7 @@ hr:after {
 }
 
 .vote {
+  background: transparent;
   border:1px solid #ECECEC;
   border-radius:6px;
   padding:3px 12px;
