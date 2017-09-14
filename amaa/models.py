@@ -33,11 +33,14 @@ class QuestionSession(models.Model):
         # TODO: check that this can only be called AFTER the Q & A session has happened.
         raise NotImplementedError
 
+    def __str__(self):
+        return self.name
+
 
 class Question(models.Model):
     """ A question which an audience member would like to be asked in the question session. """
 
-    session = models.ForeignKey(QuestionSession)
+    session = models.ForeignKey(QuestionSession, related_name='question_list')
     text = djangae_fields.CharField(max_length=140)  # Twitter-style length limit!
     votes_sharded = djangae_fields.ShardedCounterField(shard_count=10)
     votes_summed = models.PositiveIntegerField(default=0)

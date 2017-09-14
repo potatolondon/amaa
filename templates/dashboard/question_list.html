@@ -1,0 +1,11 @@
+{% extends 'dashboard/base.html' %}
+
+{% block content %}
+    <h1>Session <em>{{ question_session.name }}</em></h1>
+
+    <ul>
+        {% for question in question_list %}
+            <li>{{ question.text }}</li>
+        {% endfor %}
+    </ul>
+{% endblock content %}

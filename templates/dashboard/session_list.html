@@ -1,0 +1,13 @@
+{% extends 'dashboard/base.html' %}
+
+{% block content %}
+    <h1>Sessions</h1>
+
+    <ul>
+        {% for question_session in question_session_list %}
+            <li>
+                <a href="{% url 'dashboard:question_list' question_session.pk %}">{{ question_session.name }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock content %}

@@ -10,6 +10,16 @@ indexes:
 # automatically uploaded to the admin console when you next deploy
 # your application using appcfg.py.
 
+- kind: amaa_question
+  properties:
+  - name: __key__
+    direction: desc
+
+- kind: amaa_questionsession
+  properties:
+  - name: __key__
+    direction: desc
+
 - kind: cspreports_cspreport
   properties:
   - name: created
