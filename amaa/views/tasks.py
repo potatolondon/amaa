@@ -44,7 +44,7 @@ def _sum_votes_for_question(question_pk):
     """
     from amaa.models import Question
     # Note that this transaction relies on there only being 10 shards in the `votes_sharded` field
-    with transaction.atomic():
+    with transaction.atomic(xg=True):
         question = Question.objects.get(pk=question_pk)
         if question.is_asked:
             return
