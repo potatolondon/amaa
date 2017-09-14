@@ -98,3 +98,9 @@ class Vote(models.Model):
         """
         if self.answer is not None and self.user:
             raise IntegrityError("Cannot have an answer and a user. This would break anonymity.")
+
+    def vote(self, answer=True):
+        """ Cast the vote as the given answer. """
+        self.answer = answer
+        self.user = None
+        self.save()
