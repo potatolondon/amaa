@@ -50,7 +50,7 @@ def question_list(request, pk):
 
 def big_screen(request, pk):
     question_session = get_object_or_404(QuestionSession, id=pk)
-    question_list = question_session.question_set.order_by("-votes_summed")
+    question_list = question_session.question_list.order_by("-votes_summed")
     context = {
         "question_session": question_session,
         "question_list": question_list,

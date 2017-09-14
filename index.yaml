@@ -15,6 +15,12 @@ indexes:
   - name: __key__
     direction: desc
 
+- kind: amaa_question
+  properties:
+  - name: session_id
+  - name: votes_summed
+    direction: desc
+
 - kind: amaa_questionsession
   properties:
   - name: __key__
