@@ -6,6 +6,7 @@ from djangae import fields as djangae_fields
 from djangae.contrib.gauth_datastore.models import GaeAbstractDatastoreUser
 from django.conf import settings
 from django.db import models, IntegrityError
+from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from google.appengine.ext import deferred
 
@@ -74,6 +75,9 @@ class Question(models.Model):
                 _queue=settings.QUEUES.VOTE_CREATION,
             )
         return return_value
+
+    def get_vote_for_user(self, user):
+        return Vote.objects.filter(question=self, user=user).first()
 
     def __str__(self):
         return self.text

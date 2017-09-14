@@ -7,5 +7,6 @@ urlpatterns = [
     url(r'^big-screen/$', views.big_screen, name='big_screen'),
     url(r'^all-questions/$', views.all_questions, name='all_questions'),
     url(r'^session/(?P<pk>\d+)/$', views.question_list, name='question_list'),
+    url(r'^vote-question/(?P<pk>\d+)/$', views.vote_question, name='vote_question'),
     url(r'^$', views.session_list, name='session_list'),
 ]

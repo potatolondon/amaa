@@ -19,7 +19,18 @@
 
     <ul>
         {% for question in question_list %}
-            <li>{{ question.text }}</li>
+            <li>
+                {{ question.text }}
+                <form action="{% url 'dashboard:vote_question' question.id %}">
+                    {% csrf_token %}
+                    <input
+                        class="btn btn-primary btn-sm"
+                        type="submit"
+                        value="Vote"
+                        {% if not question.can_vote %}disabled="disabled"{% endif %}
+                    >
+                </form>
+            </li>
         {% empty %}
             <li>There are no questions yet.</li>
         {% endfor %}
