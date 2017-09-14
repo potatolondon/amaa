@@ -1,9 +1,10 @@
-from google.appengine.api import users
+# THIRD PARTY
+from django.shortcuts import render, redirect
+from django.core.urlresolvers import reverse
 
+# AMAA
 from amaa.models import QuestionSession, Question
 from dashboard.forms import QuestionForm
-from django.shortcuts import render, redirect
-from django.urls import reverse
 
 
 def session_list(request):
