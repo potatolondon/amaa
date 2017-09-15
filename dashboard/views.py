@@ -71,9 +71,6 @@ def vote_question(request, pk):
     return redirect(reverse('dashboard:question_list', kwargs={'pk': question.session.id}))
 
 
-def submit_question(request):
-    raise NotImplementedError
-
 
 def finish(request, session_pk):
     # This will allow you to set the 'is_finished' flag to True and wipe out the voting data.
