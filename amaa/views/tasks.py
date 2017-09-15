@@ -87,6 +87,6 @@ def delete_votes_from_session(session_pk):
             session_pk
         )
         return
-    for question in session.question_set.all():
+    for question in session.question_list.all():
         question.vote_set.all().delete()
     logger.info("Finishing deleting Vote objects from session %s", session_pk)
