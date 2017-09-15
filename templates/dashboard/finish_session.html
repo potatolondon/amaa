@@ -1,0 +1,38 @@
+{% extends 'dashboard/base.html' %}
+
+{% block content %}
+    <h1>
+        <small>AMA Anonymous</small><br/>
+        Finish Session - {{ question_session.name }}
+    </h1>
+
+    {% if wipeout_started %}
+        <div class="alert alert-success" role="alert">
+            Session marked as finished.
+        </div>
+    {% else %}
+
+        {% if question_session.is_finished %}
+            <div class="alert alert-warning" role="alert">
+            This session is already finished.
+        </div>
+        {% else %}
+            <p>
+                Are you sure you want to mark this session as done?
+            </p>
+            <p class="top">
+                This will prevent any further voting and fully anonymise voting data.
+            </p>
+            <div class="alert alert-danger">
+                This action cannot be undone.
+            </div>
+
+            <form action="" method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary">Finish Session</button>
+            </form>
+        {% endif %}
+    {% endif %}
+
+
+{% endblock content %}

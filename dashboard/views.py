@@ -71,11 +71,21 @@ def vote_question(request, pk):
     return redirect(reverse('dashboard:question_list', kwargs={'pk': question.session.id}))
 
 
+def finish_session(request, pk):
+    """ Allows the user to mark the session as finished, which removes it from the home page
+        listing and deletes all of the Vote objects (leaving only the counts).
+    """
+    session = get_object_or_404(QuestionSession, pk=pk)
+    context = {
+        "question_session": session,
+    }
+    if request.method == "POST":
+        session.is_finished = True
+        session.save()
+        session.wipeout()
+        context["wipeout_started"] = True
 
-def finish(request, session_pk):
-    # This will allow you to set the 'is_finished' flag to True and wipe out the voting data.
-    # That will have the effect of hiding the session from the home page
-    raise NotImplementedError
+    return render(request, "dashboard/finish_session.html", context)
 
 
 def wipeout_voting_data(request):
