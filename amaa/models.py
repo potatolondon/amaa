@@ -39,7 +39,6 @@ class QuestionSession(models.Model):
             tasks.delete_votes_from_session, self.pk,
             _queue=settings.QUEUES.WIPEOUT
         )
-        tasks.delete_votes_from_session(self.pk)
 
     def votes_can_be_wiped(self):
         """ Is it ok to delete the vote data from this session? """
