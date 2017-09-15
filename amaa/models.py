@@ -42,10 +42,9 @@ class QuestionSession(models.Model):
 
     def votes_can_be_wiped(self):
         """ Is it ok to delete the vote data from this session? """
-        return (
-            self.is_finished and
-            self.time < timezone.now() - timedelta(minutes=30)
-        )
+        # TODO: Possibly we should check that the session is in the past as well, but that then
+        # means that you can't wipe out the voting data for a session which you decide to cancel
+        return self.is_finished
 
     def __str__(self):
         return self.name
