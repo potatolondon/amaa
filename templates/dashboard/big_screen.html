@@ -41,3 +41,7 @@
             </ul>
 
 {% endblock content %}
+
+{% block footer %}
+  <div class="container"><a href="{% url 'dashboard:finish_session' pk=question_session.pk %}">Finish Session</a></div>
+{% endblock footer %}
