@@ -6,7 +6,6 @@ from djangae.db import transaction
 from django.conf import settings
 from django.db import IntegrityError
 from django.http import HttpResponse
-from google.appengine.ext import deferred
 
 # AMAA
 from amaa.constants import USER_CHOICES
@@ -15,30 +14,7 @@ from amaa.constants import USER_CHOICES
 logger = logging.getLogger(__name__)
 
 
-def sum_votes(request):
-    """ For any QuestionSessions which are live, find all the Questions and sum up their
-        votes from the sharded counter field into a single model field.
-        This is because the sharded counter field can't be ordered on, but we need the sharded
-        counter field in order to allow many people to vote at once without hitting the Datastore
-        write rate limit.
-    """
-    # Our cron runs once per minute, but we want to update the votes much quicker than that, so we
-    # fire off another task for each question so that we get an update every few seconds.
-    # But (to avoid running crons all the time), we only fire off those tasks for questions that
-    # have not yet been asked, in sessions that are active.
-    from amaa.models import QuestionSession
-    for session in QuestionSession.objects.filter(is_on_air=True):
-        for question_pk in session.question_list.filter(is_asked=False).values_list('pk', flat=True):
-            for countdown in xrange(0, 60, 10):
-                deferred.defer(
-                    _sum_votes_for_question, question_pk,
-                    _queue=settings.QUEUES.VOTE_SUMMING,
-                    _countdown=countdown
-                )
-    return HttpResponse("Vote summing tasks deferred.")
-
-
-def _sum_votes_for_question(question_pk):
+def sum_votes_for_question(question_pk):
     """ Given a single Question ID, check to see if the number of votes in the sharded counter
         field has changed, and if it has then update the non-sharded votes field.
     """

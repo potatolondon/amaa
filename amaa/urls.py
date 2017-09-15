@@ -24,7 +24,6 @@ urlpatterns = (
 
     url(r'^auth/', include('djangae.contrib.gauth.urls')),
 
-    url(r'^_cron/sum-votes/', task_views.sum_votes),
     url(r'^_tasks/create-users/', task_views.create_users),
 
     url(r'^', include('dashboard.urls', namespace='dashboard')),

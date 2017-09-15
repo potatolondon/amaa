@@ -1,4 +1,1 @@
 cron:
-- description: sum votes from sharded counters
-  url: /_cron/sum-votes/
-  schedule: every 1 minutes

@@ -8,6 +8,7 @@ from django.conf import settings
 from django.db import models, IntegrityError
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
+from google.appengine.api import taskqueue
 from google.appengine.ext import deferred
 
 # AMAA
@@ -106,4 +107,17 @@ class Vote(models.Model):
     def vote(self, answer=True):
         """ Cast the vote as the given answer. """
         self.question.votes_sharded.increment()
+        # Defer a task to run in 10 seconds' time.  But give it a consistent task name so that if
+        # another person votes on this question in the meantime, the duplicate task is
+        # ignored/cancelled
+        try:
+            deferred.defer(
+                tasks.sum_votes_for_question,
+                self.question_id,
+                _queue=settings.QUEUES.VOTE_SUMMING,
+                _countdown=10,
+                _name="sum-votes-for-question-%s" % self.question_id,
+            )
+        except taskqueue.TaskAlreadyExistsError:
+            pass
         self.delete()
