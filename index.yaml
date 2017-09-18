@@ -38,6 +38,12 @@ indexes:
   - name: __key__
     direction: desc
 
+- kind: djangae_countershard
+  ancestor: yes
+  properties:
+  - name: __key__
+  - name: count
+
 - kind: django_admin_log
   properties:
   - name: user_id

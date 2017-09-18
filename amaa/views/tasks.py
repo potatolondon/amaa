@@ -24,7 +24,7 @@ def sum_votes_for_question(question_pk):
         question = Question.objects.get(pk=question_pk)
         if question.is_asked:
             return
-        sharded_votes = question.votes_sharded.count()
+        sharded_votes = question.votes_sharded.value()
         if question.votes_summed != sharded_votes:
             if question.votes_summed > sharded_votes:
                 logger.error("Question %s has more votes_sharded than votes_sharded.", question_pk)
