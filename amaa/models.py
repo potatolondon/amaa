@@ -106,6 +106,10 @@ class Vote(models.Model):
         # Defer a task to run in 10 seconds' time.  But give it a consistent task name so that if
         # another person votes on this question in the meantime, the duplicate task is
         # ignored/cancelled
+
+        # TODO: I'm not sure if this will actually work very well, because a task with the same
+        # name might be tombstoned for longer than 10 seconds, and therefore if there are lots of
+        # people voting, the task might not actually run after the last vote.  Needs a think.
         try:
             deferred.defer(
                 tasks.sum_votes_for_question,
