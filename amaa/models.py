@@ -114,6 +114,6 @@ class Vote(models.Model):
                 _countdown=10,
                 _name="sum-votes-for-question-%s" % self.question_id,
             )
-        except taskqueue.TaskAlreadyExistsError:
+        except (taskqueue.TaskAlreadyExistsError, taskqueue.TombstonedTaskError):
             pass
         self.delete()
