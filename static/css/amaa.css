@@ -46,6 +46,10 @@ hr:after {
   right:0;
 }
 
+.session-list__session {
+  margin-bottom: 1rem;
+}
+
 .qlist {
   list-style-type: none;
   margin:0;
@@ -148,6 +152,7 @@ hr:after {
   font-size: 20px;
   color: #0079BA;
   font-family: HelveticaNeue;
+  margin-bottom: 0;
 }
 
 .presenter {

@@ -5,7 +5,7 @@
 
     <ul>
         {% for question_session in question_session_list %}
-            <li>
+            <li class="session-list__session">
                 <div class="session-detail">
                     <a href="{% url 'dashboard:question_list' question_session.pk %}">
                       <h3 class="title">
